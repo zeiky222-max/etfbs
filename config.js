@@ -1,1 +1,1 @@
-PRIVATE_LINK_B64=\"'+btoa(i.value.trim())+'\";'">Encode</button>
+var PRIVATE_LINK_B64="aHR0cHM6...";
