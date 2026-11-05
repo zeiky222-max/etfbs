@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Escape Tsunami – Live Servers</title>
+<style>
+:root{--bg:#1b1240;--card:rgba(255,255,255,.08);--text:#fff;--mut:#cfc6ff;--accent:#ff9a2e;--accent2:#ffd23f;--sea:#6fe06f;--live:#3ddc6a;--line:rgba(255,255,255,.38);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--text);text-shadow:0 1px 5px rgba(0,0,0,.85);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;min-height:100vh}
+video#bg{position:fixed;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
+.shade{position:fixed;inset:0;z-index:0;background:linear-gradient(180deg,rgba(20,12,50,.12),rgba(20,12,50,.3))}
+.art{display:block;width:100%;max-width:420px;margin:0 auto 16px;border-radius:16px;border:3px solid var(--accent);box-shadow:0 8px 24px rgba(0,0,0,.4)}
+main{position:relative;z-index:1;max-width:760px;margin:0 auto;padding:18px 16px 40px}
+header{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.logo{text-shadow:none;filter:drop-shadow(0 2px 4px rgba(0,0,0,.8));font-weight:900;font-size:1.25rem;letter-spacing:.04em;text-transform:uppercase;background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.badge{display:flex;align-items:center;gap:8px;padding:6px 12px;border:1px solid var(--line);border-radius:99px;background:var(--card);font-size:.85rem;font-weight:600}
+.dot{width:10px;height:10px;border-radius:50%;background:var(--live);box-shadow:0 0 0 0 var(--live);animation:pulse 1.6s infinite}
+@keyframes pulse{70%{box-shadow:0 0 0 10px rgba(20,199,106,0)}100%{box-shadow:0 0 0 0 rgba(20,199,106,0)}}
+.hero{margin:26px 0 22px;padding:26px 20px;border-radius:20px;border:1px solid var(--line);background:var(--card);backdrop-filter:blur(2px);text-align:center}
+.hero h1{margin:0 0 6px;font-size:clamp(1.9rem,8vw,3rem);line-height:1.05;text-transform:uppercase;font-weight:900}
+.hero h1 span{color:var(--accent)}
+.hero p{margin:0 0 18px;color:var(--mut)}
+.btn{text-shadow:none;appearance:none;border:0;cursor:pointer;font:inherit;font-weight:800;border-radius:12px;padding:11px 20px;color:#2b1700;background:linear-gradient(180deg,var(--accent2),var(--accent));box-shadow:0 4px 0 #b25f00,0 8px 18px rgba(255,138,0,.35);transition:transform .08s}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 #b25f00}
+.btn.big{font-size:1.2rem;padding:14px 34px;text-transform:uppercase}
+.btn.sm{padding:8px 16px;font-size:.9rem}
+.btn.ghost{background:transparent;color:var(--text);box-shadow:none;border:1px solid var(--line)}
+h2{font-size:1rem;text-transform:uppercase;letter-spacing:.08em;color:var(--mut);margin:24px 0 10px;display:flex;justify-content:space-between;align-items:center}
+.srv{display:grid;grid-template-columns:1fr auto;gap:8px 12px;align-items:center;padding:14px;margin-bottom:10px;border-radius:16px;border:1px solid var(--line);background:var(--card);backdrop-filter:blur(2px)}
+.srv .name{font-weight:800;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.tag{text-shadow:none;font-size:.68rem;padding:2px 8px;border-radius:99px;font-weight:800;text-transform:uppercase;background:var(--sea);color:#00263a}
+.tag.private{background:#b388ff;color:#1c0a3d}.tag.vip{background:var(--accent2);color:#3a2b00}
+.meta{grid-column:1/-1;display:flex;gap:14px;font-size:.82rem;color:var(--mut);flex-wrap:wrap;align-items:center}
+.bar{flex:1;min-width:90px;height:8px;border-radius:9px;background:var(--line);overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--live),var(--accent2),var(--accent));transition:width .8s}
+.x{background:none;border:0;color:var(--mut);cursor:pointer;font-size:.8rem;text-decoration:underline;padding:0}
+form{display:grid;gap:8px;padding:14px;border-radius:16px;border:1px solid var(--line);background:var(--card);backdrop-filter:blur(2px)}
+input,select{width:100%;font:inherit;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:rgba(255,255,255,.12);color:var(--text)}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+#toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translate(-50%,120px);background:#06304a;color:#fff;padding:12px 18px;border-radius:12px;z-index:5;transition:transform .3s;font-weight:600;max-width:90vw}
+#toast.on{transform:translate(-50%,0)}
+.err{color:#ff6b6b;font-size:.85rem;min-height:1em}
+@media (prefers-reduced-motion:reduce){.dot{animation:none}}
+</style>
+</head>
+<body>
+<video id="bg" autoplay muted loop playsinline preload="auto" poster="theme.jpg" src="bg.mp4"></video><div class="shade"></div>
+<main>
+<header>
+  <div class="logo">🌊 Escape Tsunami</div>
+  <div class="badge"><span class="dot"></span><span>LIVE · <b id="online">0</b> online</span></div>
+</header>
+
+<section class="hero">
+  <img class="art" alt="Escape Tsunami" src="theme.jpg">
+  <h1>Run. Dodge.<br><span>Escape the Tsunami!</span></h1>
+  <p>Tap Join to jump straight into the private server.</p>
+  <button class="btn big" id="quick">▶ Join Server</button>
+</section>
+
+<h2>Live Servers <span id="clock"></span></h2>
+<div id="list"></div>
+
+
+</main>
+<div id="toast"></div>
+
+<script src="config.js"></script>
+<script>
+var PRIVATE_LINK="";try{PRIVATE_LINK=atob(PRIVATE_LINK_B64)}catch(e){}
+var DEFAULTS=[
+ {name:"Private Server #1",type:"private",url:PRIVATE_LINK},
+ {name:"Private Server #2",type:"private",url:PRIVATE_LINK},
+ {name:"Private Server #3",type:"private",url:PRIVATE_LINK}
+];
+var custom=[];
+var servers=[];
+function build(){
+  servers=DEFAULTS.map(function(s,i){return {id:"d"+i,name:s.name,type:s.type,url:s.url,max:s.type==="public"?50:20,custom:false}})
+   .concat(custom.map(function(s,i){return {id:"c"+i,name:s.name,type:s.type,url:s.url,max:s.type==="public"?50:20,custom:true,ci:i}}));
+  servers.forEach(function(s){s.p=Math.max(1,Math.round(s.max*(.35+Math.random()*.55)));s.ping=18+Math.floor(Math.random()*60)});
+}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(custom))}catch(e){}}
+function esc(t){var d=document.createElement("div");d.textContent=t;return d.innerHTML}
+function render(){
+  var l=document.getElementById("list");
+  l.innerHTML=servers.map(function(s){
+    return '<div class="srv" data-id="'+s.id+'"><div class="name">'+esc(s.name)+' <span class="tag '+s.type+'">'+s.type+'</span></div>'
+    +'<button class="btn sm" data-join="'+s.id+'">Join</button>'
+    +'<div class="meta"><span>👥 <b data-p>'+s.p+'</b>/'+s.max+'</span><div class="bar"><i data-b style="width:'+(s.p/s.max*100)+'%"></i></div><span>📶 <b data-ping>'+s.ping+'</b> ms</span>'
+    +(s.custom?'<button class="x" data-del="'+s.ci+'">remove</button>':'')+'</div></div>';
+  }).join("")||'<p style="color:var(--mut)">No servers yet. Add one below.</p>';
+  tick();
+}
+function tick(){
+  var total=0;
+  servers.forEach(function(s){
+    s.p=Math.min(s.max,Math.max(1,s.p+Math.floor(Math.random()*5)-2));
+    s.ping=Math.max(12,Math.min(140,s.ping+Math.floor(Math.random()*9)-4));
+    total+=s.p;
+    var el=document.querySelector('[data-id="'+s.id+'"]');if(!el)return;
+    el.querySelector("[data-p]").textContent=s.p;
+    el.querySelector("[data-ping]").textContent=s.ping;
+    el.querySelector("[data-b]").style.width=(s.p/s.max*100)+"%";
+  });
+  document.getElementById("online").textContent=(total*37+Math.floor(Math.random()*40)).toLocaleString();
+  document.getElementById("clock").textContent=new Date().toLocaleTimeString([], {hour:"2-digit",minute:"2-digit",second:"2-digit"});
+}
+function toast(m){var t=document.getElementById("toast");t.textContent=m;t.classList.add("on");clearTimeout(toast.h);toast.h=setTimeout(function(){t.classList.remove("on")},2200)}
+function join(s){
+  if(!s)return;
+  if(!/^https:\/\//.test(s.url)){toast("⚠️ Private server link not set yet");return}
+  toast("🌊 Joining "+s.name+"…");
+  setTimeout(function(){location.href=s.url},700);
+}
+document.getElementById("list").addEventListener("click",function(e){
+  var j=e.target.getAttribute("data-join"),d=e.target.getAttribute("data-del");
+  if(j)join(servers.filter(function(s){return s.id===j})[0]);
+  if(d!==null){custom.splice(+d,1);save();build();render()}
+});
+document.getElementById("quick").addEventListener("click",function(){join(servers[0])});
+build();render();setInterval(tick,2500);
+
+// Live video background
+var bg=document.getElementById("bg");
+if(matchMedia("(prefers-reduced-motion:reduce)").matches){bg.removeAttribute("autoplay");bg.pause()}
+else{var go=function(){bg.play().catch(function(){})};go();addEventListener("pointerdown",go,{once:true})}
+</script>
+</body>
+</html>
